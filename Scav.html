@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BYU Scavenger Hunt Website</title>
+    <style>
+        /* General reset to remove default margin and padding */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling for BYU theme */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #002E5D; /* BYU dark blue */
+    color: #FFFFFF; /* White text */
+    text-align: center; /* Center all text */
+    height: 100vh; /* Full height of the viewport */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column; /* Stack items vertically */
+}
+
+/* Container to center content */
+#output, #buttonContainer {
+    margin-top: 20px;
+    font-size: 1.5em;
+}
+
+/* Button styling */
+button {
+    background-color: #FFFFFF; /* White button */
+    color: #002E5D; /* BYU blue text */
+    border: 2px solid #002E5D; /* BYU blue border */
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* Button hover effect */
+button:hover {
+    background-color: #002E5D; /* Invert colors */
+    color: #FFFFFF;
+}
+
+/* Add some padding and space between buttons */
+#buttonContainer {
+    margin-top: 20px;
+}
+
+/* Styling for when all tasks are done */
+#output {
+    margin-top: 20px;
+    font-size: 1.8em;
+    font-weight: bold;
+}
+
+
+    </style>
+</head>
+<body>
+    
+<!-- Features 
+- Button that displays dynamically a location/task to do.
+- Grabs that location/task from an array containing tasks and locations.
+- After completing a task, click "Next Challenge" to remove the task and display the next.
+- Once all tasks are completed, display a "Finish the game" message.
+-->
+
+<button id="btnPlay" onclick="startGame()">Play</button>
+<p id="output"></p>
+<div id="buttonContainer"></div>
+
+<script>
+    let aLocation = ['Indoor tennis courts', 'The roof of the JFSB', 'Po The Panda', 'Maker Space BYU Library', 
+    'Take a selfie with a bunch of students ', 'Underground Library Parking', 'Music Building 3012 practice room', 
+    'Get inside a heritage Building', 'Get inside Helaman Halls'];
+
+    // Function to get a random index from the array
+    function getRandomIndex(arr) {
+        return Math.floor(Math.random() * arr.length);
+    }
+
+    // Function to start the game and display the first random task
+    function startGame() {
+        if (aLocation.length > 0) {
+            const randomIndex = getRandomIndex(aLocation);
+            document.getElementById('output').textContent = aLocation[randomIndex];  // Show the random task
+            aLocation.splice(randomIndex, 1);  // Remove the selected task from the array
+            showNextButton();  // Display the "Next Challenge" button
+        }
+    }
+
+    // Function to move to the next random task
+    function nextChallenge() {
+        if (aLocation.length > 0) {
+            const randomIndex = getRandomIndex(aLocation);
+            document.getElementById('output').textContent = aLocation[randomIndex];  // Show the random task
+            aLocation.splice(randomIndex, 1);  // Remove the selected task from the array
+        } else {
+            document.getElementById('output').textContent = "Congratulations! You finished the game.";
+            document.getElementById('buttonContainer').innerHTML = '';
+
+            // Create the 'Start Over' button
+            const startOverButton = document.createElement('button');
+            startOverButton.textContent = 'Start Over'; // Button text
+            startOverButton.id = 'startOverButton'; // Button id
+
+            // Append the button to the 'buttonContainer'
+            document.getElementById('buttonContainer').appendChild(startOverButton);
+
+            // Add the reload functionality to the button
+            startOverButton.addEventListener('click', function(){
+                location.reload(); // Refreshes the page
+            });
+        }   
+    }
+
+    // Function to create the "Next Challenge" button
+    function showNextButton() {
+        const buttonContainer = document.getElementById('buttonContainer');
+        buttonContainer.innerHTML = '';  // Clear any existing buttons
+
+        const newButton = document.createElement('button');  // Create a new button element
+        newButton.textContent = "Next Challenge";  // Set button text
+        newButton.id = 'newButton';  // Set button ID
+        
+        buttonContainer.appendChild(newButton);  // Add the new button to the container
+        newButton.addEventListener('click', nextChallenge);  // Link the button to nextChallenge function
+    }
+</script>
+
+</body>
+</html>
